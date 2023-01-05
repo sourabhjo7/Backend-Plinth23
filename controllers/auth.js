@@ -40,6 +40,7 @@ exports.register = async (req, res) => {
       instituteAreaPincode,
       yearOfStudy,
       password } = req.body;
+      console.log(req.body);
 
     if (
       !(

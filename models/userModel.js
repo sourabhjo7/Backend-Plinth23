@@ -5,45 +5,36 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   email: {
     type: String,
-    required: true,
     unique: true,
   },
-  firstName: {type: String, required : true},
-  lastName: {type: String, required : true},
+  firstName: {type: String},
+  lastName: {type: String},
   password: {
     type: String,
   },
   phoneNo: {
     type: String,
-    required: true,
   },
   country: {
     type: String,
-    required: true,
   },
   city: {
     type: String,
-    required: true,
   },
   residentialAddress: {
     type: String,
-    required: true,
   },
   instituteName: {
     type: String,
-    required: true,
   },
   instituteAddress: {
     type: String,
-    required: true,
   },
   instituteAreaPincode: {
     type: String,
-    required: true,
   },
   yearOfStudy: {
     type: String,
-    required: true,
   },
   token: {
     type: String,
@@ -56,5 +47,5 @@ const userSchema = new Schema({
 
 });
 
-module.exports =  mongoose.model("user", userSchema, "user");
+module.exports =  mongoose.model("User", userSchema);
 
