@@ -28,7 +28,18 @@ exports.deleteUser = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName,
+      lastName,
+      email,
+      phoneNo,
+      country,
+      city,
+      residentialAddress,
+      instituteName,
+      instituteAddress,
+      instituteAreaPincode,
+      yearOfStudy,
+      password } = req.body;
 
     if (
       !(

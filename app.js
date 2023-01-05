@@ -15,7 +15,8 @@ const indexRouter = require("./route/index");
 const authRouter = require("./route/auth");
 
 const app = express();
- 
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+ app.use(express.json());
 app.use(
     cors({
       origin: "*",// origin: ["http://localhost:3000"], // change origin based on domain main of the application
