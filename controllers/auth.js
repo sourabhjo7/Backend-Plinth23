@@ -63,7 +63,7 @@ exports.register = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(401).send("User already exist");
+      res.redirect("/auth/login")
     }
 
     const encPassword = await bcrypt.hash(password, 10);
@@ -116,6 +116,9 @@ exports.login = async (req, res) => {
         token,
         user,
       });
+    }
+    else{
+      console.log('check password or create new account')
     }
 
     res.status(400).send("Email or password incorrect");
