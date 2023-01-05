@@ -10,26 +10,15 @@ const userModel = require('./models/userModel')
 const Team = require('./models/teamModel')
 
 const app = express();
-
-
-app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());  
-
+ 
 app.use(
-	cors({
-		origin: "http://localhost:3001",
-		methods: "GET,POST,PUT,DELETE",
-		credentials: true,
-	})
-);
-app.set('view engine', 'ejs');
-
-
-
-// create application/json parser
-var jsonParser = bodyParser.json()
-
+    cors({
+      origin: "*",// origin: ["http://localhost:3000"], // change origin based on domain main of the application
+      optionsSuccessStatus: 200,
+      credentials: true,
+    })
+  );
+app.use(cookieParser());
 
 
 
