@@ -6,6 +6,7 @@ const controller = require('../controller/auth');//Requring Controllers
 router.post("/register", controller.register);
 router.get("/getallusers",controller.allusers);
 router.get("/getallusers/:id",controller.allusersById);
+// ex---> auth/register
 router.post("/login", controller.login);
 router.get("/logout", controller.logout);
 module.exports = router
