@@ -14,5 +14,4 @@ const registerSchema = new mongoose.Schema({
     yearOfStudy : {type : Number, required : true},
 })
 
-const Register = mongoose.model("Register", registerSchema)
-module.exports = Register;
+module.exports  = mongoose.model("Register", registerSchema)

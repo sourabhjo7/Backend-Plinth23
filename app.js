@@ -10,6 +10,10 @@ const Register = require('./models/registrationModel')
 const userModel = require('./models/userModel')
 const Team = require('./models/teamModel')
 
+// Routers
+const indexRouter = require("./route/index");
+const authRouter = require("./route/auth");
+
 const app = express();
  
 app.use(
@@ -21,22 +25,20 @@ app.use(
   );
 app.use(cookieParser());
 
-
-
-const db = 'mongodb://localhost:27017/auth'
-mongoose.connect(
-  db,
-  {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-
-  },
-  (error) => {
-    if (error) console.log(error)
-  }
-)
-
-
+app.use(function (req, res, next) {
+    res.header("Content-Type", "application/json;charset=UTF-8");
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
+  
+  // Using Routes
+  app.use("/", indexRouter);
+  app.use("/auth", authRouter);
+  
 
 
 
@@ -218,7 +220,13 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
     })
     
     
-    
-    app.listen(3000, function() {
-        console.log("Server started on port 3000");
+
+
+
+
+    const port =process.env.PORT ||3000;
+    app.listen(port ,()=>{
+        console.log(`server running on port ${port}`);
     });
+    
+    

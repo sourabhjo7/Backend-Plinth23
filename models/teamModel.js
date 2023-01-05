@@ -16,5 +16,4 @@ const teamSchema = new mongoose.Schema({
     email10 : String, 
 })
 
-const Team = mongoose.model("Team", teamSchema)
-module.exports = Team;
+module.exports  = mongoose.model("Team", teamSchema)

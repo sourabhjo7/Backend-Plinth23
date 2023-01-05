@@ -2,21 +2,26 @@
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  id: {
-    type: String,
-    default: null,
-  },
   email: {
     type: String,
-    required: [true, "email required"],
-    unique: [true, "email already registered"],
+    required: true,
+    unique: true,
   },
   firstName: {type: String, required : true},
   lastName: {type: String, required : true},
-  profilePhoto: {type: String, required : true},
+  password: {
+    type: String,
+  },
+  token: {
+    type: String,
+  },
+  role:{
+    type:String,
+    default:"user"
+  },
+  events:[],
 
 });
 
-var userModel = mongoose.model("user", userSchema, "user");
+module.exports =  mongoose.model("user", userSchema, "user");
 
-module.exports = userModel;
