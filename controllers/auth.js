@@ -30,7 +30,22 @@ exports.register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
-    if (!(firstName && lastName && email && password)) {
+    if (
+      !(
+        firstName &&
+        lastName &&
+        email &&
+        phoneNo &&
+        country &&
+        city &&
+        residentialAddress &&
+        instituteName &&
+        instituteAddress &&
+        instituteAreaPincode &&
+        yearOfStudy &&
+        password
+      )
+    ) {
       res.status(404).send("All fields are required");
     }
 
@@ -100,60 +115,57 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   console.log("logout route called ");
   console.log(req.cookies);
-  res.clearCookie('token').send("done");
-  
-}
-exports.updateUser=async(req,res)=>{
-  const {firstName,lastName,email,password,userRole}=req.body;
-    console.log({
-      firstName,lastName,password,userRole
-    })
-      const {id}=req.params;
-      if(password==''){ 
-        User.findByIdAndUpdate({_id:id}, 
-          {firstName,lastName,email,userRole},
-          {new: true},
-          function (err, docs) {
-    if (err){
-    console.log(err)
-    }
-    else{
-    console.log("Updated User : ", docs);
-    return res.status(201).json({success: true});
-    } 
-    });
-      }  
-      else{
-        const encPassword = await bcrypt.hash(password, 10);
-        User.findByIdAndUpdate({_id:id}, 
-          {firstName,lastName,email,password:encPassword,userRole},
-          {new: true},
-          function (err, docs) {
-    if (err){
-    console.log(err)
-    }
-    else{
-    console.log("Updated User : ", docs);
-    return res.status(201).json({success: true});
-    }
-    
-    
-    });
-      }    
-      
-}
-     
+  res.clearCookie("token").send("done");
+};
+exports.updateUser = async (req, res) => {
+  const { firstName, lastName, email, password, userRole } = req.body;
+  console.log({
+    firstName,
+    lastName,
+    password,
+    userRole,
+  });
+  const { id } = req.params;
+  if (password == "") {
+    User.findByIdAndUpdate(
+      { _id: id },
+      { firstName, lastName, email, userRole },
+      { new: true },
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Updated User : ", docs);
+          return res.status(201).json({ success: true });
+        }
+      }
+    );
+  } else {
+    const encPassword = await bcrypt.hash(password, 10);
+    User.findByIdAndUpdate(
+      { _id: id },
+      { firstName, lastName, email, password: encPassword, userRole },
+      { new: true },
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Updated User : ", docs);
+          return res.status(201).json({ success: true });
+        }
+      }
+    );
+  }
+};
 
-exports.allusersById=async(req,res)=>{
-    
+exports.allusersById = async (req, res) => {
   try {
-      const {id} = req.params;
-      console.log(id);
-     const user= await User.findById(id);
-  
-      res.status(201).json({success: true,user});
-  
-    } catch (e) {
-        console.error();
-    }
-}
+    const { id } = req.params;
+    console.log(id);
+    const user = await User.findById(id);
+
+    res.status(201).json({ success: true, user });
+  } catch (e) {
+    console.error();
+  }
+};
