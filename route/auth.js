@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {valToken} = require("../middleware/auth");
-const controller = require('../controller/auth');//Requring Controllers
+const {valToken} = require("../midllewares/auth");
+const controller = require('../controllers/auth');//Requring Controllers
 // ex---> auth/register
 router.post("/register", controller.register);
 router.get("/getallusers",controller.allusers);

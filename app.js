@@ -1,14 +1,14 @@
 const dotenv = require('dotenv').config()
 require("./config/database").connect();
 const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose= require('mongoose');
-const passport = require('passport');
+// const bodyParser = require("body-parser");
+// const mongoose= require('mongoose');
+// const passport = require('passport');
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
-const Register = require('./models/userModel')
-const userModel = require('./models/userModel')
-const Team = require('./models/teamModel')
+// const Register = require('./models/userModel')
+// const userModel = require('./models/userModel')
+// const Team = require('./models/teamModel')
 
 // Routers
 const indexRouter = require("./route/index");
@@ -41,6 +41,8 @@ app.use(function (req, res, next) {
   
 
 
+
+/*
 
 
 app.get('/create-team', (req, res) => {
@@ -219,7 +221,7 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
     
     })
     
-    
+    */
 
 
 
