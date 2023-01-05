@@ -8,9 +8,6 @@ const cookieParser = require("cookie-parser");
 const Register = require('./models/registrationModel')
 const userModel = require('./models/userModel')
 const Team = require('./models/teamModel')
-const session = require('express-session')
-
-require('./passport-setup');
 
 const app = express();
 
