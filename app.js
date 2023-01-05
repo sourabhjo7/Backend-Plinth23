@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config()
 require("./config/database").connect();
 const express = require("express");
-// const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 // const mongoose= require('mongoose');
 // const passport = require('passport');
 const cors = require('cors')
@@ -15,7 +15,7 @@ const indexRouter = require("./route/index");
 const authRouter = require("./route/auth");
 
 const app = express();
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+app.use(bodyParser.urlencoded({ extended: false }))
  app.use(express.json());
 app.use(
     cors({
