@@ -6,7 +6,7 @@ const mongoose= require('mongoose');
 const passport = require('passport');
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
-const Register = require('./models/registrationModel')
+const Register = require('./models/userModel')
 const userModel = require('./models/userModel')
 const Team = require('./models/teamModel')
 
