@@ -63,7 +63,7 @@ exports.register = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.redirect("/auth/login")
+      return res.redirect("/auth/login")
     }
 
     const encPassword = await bcrypt.hash(password, 10);
@@ -79,9 +79,21 @@ exports.register = async (req, res) => {
       password: encPassword,
       role: urole,
     });
-    user.password = undefined;
 
-    res.status(201).json(user);
+     //token
+     const token = jwt.sign(
+      { user_id: user._id, email, role: user.role },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "10h",
+      }
+    );
+    user.password = undefined;
+    return res.status(200).cookie("token", token, options).json({
+      success: true,
+      token,
+      user,
+    });
   } catch (e) {
     console.log(e);
   }
