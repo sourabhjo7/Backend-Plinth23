@@ -229,10 +229,27 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
 
 
 
+    // configured
+    if (process.env.NODE_ENV === "production") {
+        const credentials = {
+            key: fs.readFileSync('./key.pem'),
+            cert: fs.readFileSync('./cert.pem')
+        };
+    
+        https.createServer(credentials, app).listen(443, () => {
+            console.log('HTTPS Server running on port 443');
+        });
+        http.createServer(function (req, res) {
+            res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+            res.end();
+        }).listen(80);
+    } else if (process.env.NODE_ENV === "development") {
+        app.listen(3000);
+    } else {
+        app.listen(3000);
+    }
+     
+    
 
-    const port =3000;
-    app.listen(port ,()=>{
-        console.log(`server running on port ${port}`);
-    });
     
     
