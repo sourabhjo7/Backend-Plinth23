@@ -28,8 +28,8 @@ exports.deleteUser = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    const { firstName,
-      lastName,
+    const {
+      fullName,
       email,
       phoneNo,
       country,
@@ -39,14 +39,15 @@ exports.register = async (req, res) => {
       instituteAddress,
       instituteAreaPincode,
       yearOfStudy,
-      password } = req.body;
-      console.log(req.body);
+      password,
+    } = req.body;
+    console.log(req.body);
 
     if (
       !(
-        firstName &&
-        lastName &&
+        fullName &&
         email &&
+        password &&
         phoneNo &&
         country &&
         city &&
@@ -54,16 +55,17 @@ exports.register = async (req, res) => {
         instituteName &&
         instituteAddress &&
         instituteAreaPincode &&
-        yearOfStudy &&
-        password
+        yearOfStudy
       )
     ) {
-      res.status(404).send("All fields are required");
+      return res.status(404).send("All fields are required");
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.redirect("/auth/login")
+      return res.status(400).json({
+        message: "already exits",
+      });
     }
 
     const encPassword = await bcrypt.hash(password, 10);
@@ -73,15 +75,22 @@ exports.register = async (req, res) => {
       urole = req.body.userRole;
     }
     const user = await User.create({
-      firstName,
-      lastName,
+      fullName,
+      phoneNo,
+      country,
+      city,
+      residentialAddress,
+      instituteName,
+      instituteAddress,
+      instituteAreaPincode,
+      yearOfStudy,
       email: email.toLowerCase(),
       password: encPassword,
       role: urole,
     });
 
-     //token
-     const token = jwt.sign(
+    //token
+    const token = jwt.sign(
       { user_id: user._id, email, role: user.role },
       process.env.SECRET_KEY,
       {
@@ -132,9 +141,8 @@ exports.login = async (req, res) => {
         token,
         user,
       });
-    }
-    else{
-      console.log('check password or create new account')
+    } else {
+      console.log("check password or create new account");
     }
 
     res.status(400).send("Email or password incorrect");
