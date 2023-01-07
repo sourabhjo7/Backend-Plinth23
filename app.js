@@ -233,9 +233,9 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
     // configured
     if (process.env.NODE_ENV === "production") {
         const credentials = {
-            cert: fs.readFileSync('/etc/letsencrypt/live/your_domain.com/fullchain.pem'),
-            key: fs.readFileSync('/etc/letsencrypt/live/your_domain.com/privkey.pem'),
-            ca :fs.readFileSync('/etc/letsencrypt/live/your_domain.com/chain.pem')
+            key: fs.readFileSync('./key.pem'),
+            cert: fs.readFileSync('./cert.pem'),
+            ca :fs.readFileSync('./chain.pem')
         };
     
         https.createServer(credentials, app).listen(443, () => {
