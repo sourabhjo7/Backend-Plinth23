@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
  app.use(express.json());
 app.use(
     cors({
-      origin: ["https://plinth.co.in","https://plinth2k23fest.netlify.app"],// origin: ["http://localhost:3000"], // change origin based on domain main of the application
+      origin: ["https://plinth.co.in","https://plinth2k23fest.netlify.app","http://localhost:3000"],// origin: ["http://localhost:3000"], // change origin based on domain main of the application
       optionsSuccessStatus: 200,
       credentials: true,
     })
@@ -244,6 +244,7 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
             res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
             res.end();
         }).listen(80);
+     
   
     
 

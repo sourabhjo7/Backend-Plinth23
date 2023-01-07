@@ -40,29 +40,35 @@ exports.register = async (req, res) => {
       instituteAreaPincode,
       yearOfStudy,
       password,
-    } = req.body;
-    console.log(req.body);
-
-    if (
-      !(
-        fullName &&
-        email &&
-        password &&
-        phoneNo &&
-        country &&
-        city &&
-        residentialAddress &&
-        instituteName &&
-        instituteAddress &&
-        instituteAreaPincode &&
-        yearOfStudy
-      )
-    ) {
-      return res.status(404).send("All fields are required");
-    }
+      
+    } = req.body.data;
+   const accomodation=req.body.accomodation;
+    
+    // if (
+    //   !(
+    //     fullName &&
+    //     email &&
+    //     password &&
+    //     phoneNo &&
+    //     country &&
+    //     city &&
+    //     residentialAddress &&
+    //     instituteName &&
+    //     instituteAddress &&
+    //     instituteAreaPincode &&
+    //     yearOfStudy
+    //   )
+    // ) {
+    //   console.log("data toh aya ",req.body);
+    //   return res.status(404).send("All fields are required");
+    // }
+    
+  
 
     const existingUser = await User.findOne({ email });
+    
     if (existingUser) {
+      console.log("existing user ",existingUser);
       return res.status(400).json({
         message: "already exits",
       });
@@ -86,6 +92,7 @@ exports.register = async (req, res) => {
       yearOfStudy,
       email: email.toLowerCase(),
       password: encPassword,
+      accomodation,
       role: urole,
     });
 
@@ -154,7 +161,7 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   console.log("logout route called ");
   console.log(req.cookies);
-  res.clearCookie("token").send("done");
+  res.clearCookie("token").status(200).json("done");
 };
 exports.updateUser = async (req, res) => {
   const { firstName, lastName, email, password, userRole } = req.body;

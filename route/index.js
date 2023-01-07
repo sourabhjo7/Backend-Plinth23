@@ -6,6 +6,7 @@ const {valToken} = require("../midllewares/auth");
 // const SignalController=require('../controller/signal');
 // const {getHistory,getHistoryBySignalID}=require("../controller/history");
 router.get("/", valToken, (req, res) => {
+  console.log("requested .../")
   res.status(200).json({page: "Home", user: req.userData});
 });
 

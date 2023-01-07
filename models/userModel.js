@@ -44,6 +44,10 @@ const userSchema = new Schema({
     default:"user"
   },
   events:[],
+  accomodation:{
+    type:"string",
+    default:"no"
+  },
   totalpaid:{
     type:Number,
     default:0
