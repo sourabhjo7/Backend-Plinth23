@@ -9,7 +9,7 @@ const valToken = async (req, res, next) => {
     let authHeaderVal = req.cookies.token || req.headers.authorization;
 
     if (!authHeaderVal) {
-      return res.status(403).send("token not found");
+      return res.status(403).json("token not found");
     }
 
     const token = authHeaderVal.replace("Bearer ", ""); //replacing Bearer from token if getting from header
