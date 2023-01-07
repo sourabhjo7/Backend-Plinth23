@@ -44,7 +44,10 @@ const userSchema = new Schema({
     default:"user"
   },
   events:[],
-
+  totalpaid:{
+    type:Number,
+    default:0
+  }
 });
 
 module.exports =  mongoose.model("User", userSchema);
