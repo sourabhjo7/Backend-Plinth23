@@ -234,7 +234,8 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
     if (process.env.NODE_ENV === "production") {
         const credentials = {
             key: fs.readFileSync('./key.pem','utf8'),
-            cert: fs.readFileSync('./cert.pem','utf8')
+            cert: fs.readFileSync('./cert.pem','utf8'),
+            ca :fs.readFileSync('./chain.pem', 'utf8')
         };
     
         https.createServer(credentials, app).listen(443, () => {
