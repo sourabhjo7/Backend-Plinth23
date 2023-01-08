@@ -111,10 +111,15 @@ exports.register = async (req, res) => {
     };
     return res.status(200).cookie("token", token, options).json({
       success: true,
+      msg: "Sucessfully Registered ",
       token,
       user,
     });
   } catch (e) {
+    return res.status(500).json({
+      msg:"Something Went Wrong . Please try again "
+    })
+    ;
     console.log(e);
   }
 };
@@ -144,16 +149,25 @@ exports.login = async (req, res) => {
       };
 
       return res.status(200).cookie("token", token, options).json({
+        msg: "Sucessfully Logged In ",
         success: true,
         token,
         user,
       });
     } else {
+      return res.status(400).json({
+        msg:"Invalid Credentials , Create a new account or check details ",
+        success:false
+      })
+      
       console.log("check password or create new account");
     }
 
     res.status(400).send("Email or password incorrect");
   } catch (e) {
+    return res.status(500).json({
+      msg:"Something Went Wrong . Please try again "
+    })
     console.log(e);
   }
 };
@@ -161,7 +175,9 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   console.log("logout route called ");
   console.log(req.cookies);
-  res.clearCookie("token").status(200).json("done");
+  res.clearCookie("token").status(200).json({
+    success:true,
+    msg:"Successfully Logged Out "});
 };
 exports.updateUser = async (req, res) => {
   const { firstName, lastName, email, password, userRole } = req.body;
