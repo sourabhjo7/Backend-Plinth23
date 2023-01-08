@@ -98,7 +98,7 @@ exports.register = async (req, res) => {
 
     //token
     const token = jwt.sign(
-      { user_id: user._id, email, role: user.role },
+      { user_id: user._id, email, role: user.role,name:user.fullName },
       process.env.SECRET_KEY,
       {
         expiresIn: "10h",
@@ -133,7 +133,7 @@ exports.login = async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       //token
       const token = jwt.sign(
-        { user_id: user._id, email, role: user.role },
+        { user_id: user._id, email, role: user.role ,name:user.fullName },
         process.env.SECRET_KEY,
         {
           expiresIn: "2h",
