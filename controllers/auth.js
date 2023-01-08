@@ -175,7 +175,7 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   console.log("logout route called ");
   console.log(req.cookies);
-  res.clearCookie("token").status(200).json({
+  return res.clearCookie("token").status(200).json({
     success:true,
     msg:"Successfully Logged Out "});
 };
