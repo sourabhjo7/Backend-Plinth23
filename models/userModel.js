@@ -1,5 +1,5 @@
 // Registration model
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -50,6 +50,10 @@ const userSchema = new Schema({
   totalpaid:{
     type:Number,
     default:0
+  },
+  isverified:{
+    type:Boolean,
+    default:false
   }
 });
 

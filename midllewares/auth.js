@@ -41,7 +41,16 @@ const valAdmin = async (req, res, next) => {
     const data = jwt.verify(token, process.env.SECRET_KEY); //verifing token with the secret key
     req.userData = data;
     console.log("--> token data ",data);
-    next();
+    if(data.role==="admin"){
+      return next();
+    }
+    else{
+      return res.status(401).json({
+        success:false,
+        msg:"only admin is allowed to access this page "
+      })
+    }
+    
 
   } catch (e) {
     return res.status(401).json({
