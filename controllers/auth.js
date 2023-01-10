@@ -6,11 +6,12 @@ const User = require("../models/userModel");
 
 exports.allusers = async (req, res) => {
   try {
-    const users = await User.find();
-
-    res.status(201).json({ success: true, users });
+    const users = await User.find({role:'user'}); // to avoid one admin account 
+    console.log("users--->",users);
+    return res.status(200).json({ success: true,count :users.length,users });
   } catch (e) {
-    console.error(e);
+    
+    return res.status(401).json({ success:false, msg:e});
   }
 };
 
@@ -225,9 +226,10 @@ exports.allusersById = async (req, res) => {
     const { id } = req.params;
     console.log(id);
     const user = await User.findById(id);
+    
 
-    res.status(201).json({ success: true, user });
+    res.status(200).json({ success: true,user });
   } catch (e) {
-    console.error();
+    res.status(200).json({ success:false, msg:"error "});
   }
 };
