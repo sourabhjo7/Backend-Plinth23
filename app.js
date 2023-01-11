@@ -13,6 +13,7 @@ const cookieParser = require("cookie-parser");
 // Routers
 const indexRouter = require("./route/index");
 const authRouter = require("./route/auth");
+const payRouter=require("./route/payment");
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
@@ -43,6 +44,7 @@ app.use(function (req, res, next) {
   // Using Routes
   app.use("/", indexRouter);
   app.use("/auth", authRouter);
+  app.use("/payment",payRouter);
   
 
 
@@ -189,13 +191,16 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
             ca :fs.readFileSync('./chain.pem')
         };
     
-        https.createServer(credentials, app).listen(443, () => {
-            console.log('HTTPS Server running on port 443');
-        });
-        http.createServer(function (req, res) {
-            res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-            res.end();
-        }).listen(80);
+        // https.createServer(credentials, app).listen(443, () => {
+        //     console.log('HTTPS Server running on port 443');
+        // });
+        // http.createServer(function (req, res) {
+        //     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+        //     res.end();
+        // }).listen(80);
+
+        app.listen(5000);
+
      
   
     
