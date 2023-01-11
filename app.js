@@ -9,11 +9,16 @@ const cookieParser = require("cookie-parser");
 // const Register = require('./models/userModel')
 // const userModel = require('./models/userModel')
 // const Team = require('./models/teamModel')
+const fileUpload = require('express-fileupload');
+const cloudinary = require('cloudinary').v2;
 
 // Routers
 const indexRouter = require("./route/index");
 const authRouter = require("./route/auth");
-const payRouter=require("./route/payment");
+
+const User = require("./models/userModel");
+const Payment = require("./models/payment");
+ 
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
@@ -22,6 +27,16 @@ const fs = require('fs');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
  app.use(express.json());
+ app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir : '/tmp/'
+  }));
+  
+  cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+  });
 app.use(
     cors({
       origin: ["https://plinth.co.in","https://63b9f54534bf097ab0b08ac4--roaring-kitsune-c3e064.netlify.app","http://localhost:3000"],// origin: ["http://localhost:3000"], // change origin based on domain main of the application
@@ -44,9 +59,36 @@ app.use(function (req, res, next) {
   // Using Routes
   app.use("/", indexRouter);
   app.use("/auth", authRouter);
-  app.use("/payment",payRouter);
   
 
+  app.post("/:eventName/:user_id", async (req, res) => {
+    const { user_id, eventName } = req.params;
+    const {paid,upiId}=req.body;
+    const file = req.files.file;
+   let currImg;
+    await cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+      currImg = result.url; 
+    });
+    console.log("---->",currImg);
+    const user = await User.findById(user_id); 
+          let  pendingPay = await Payment.create({
+              fullName  : user.fullName,
+              email     : user.email,
+              phoneNo   : user.phoneNo,
+              PaidFor   : eventName,
+              upiId:upiId,
+              paid:paid,
+              ssLink:currImg// link dalna h abhi 
+           });
+    
+      
+  
+  
+  
+  
+    
+    return res.status(200).send(`hello to payment ----> ${user_id},${eventName}`);
+  });
 
 
 /*
