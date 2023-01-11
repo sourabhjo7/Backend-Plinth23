@@ -178,55 +178,7 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
 
 
 
-    app.get('/registration', (req, res) => {
-        res.send('registration')
-    })
-    
-    app.post('/registration',urlencodedParser, async (req, res) => {
-        // console.log(req.body)
-        const NAME = req.body.fullName;
-        const EMAIL = req.body.email;
-        const PHONENO = req.body.phone;
-        const COUNTRY = req.body.country;
-        const CITY = req.body.city;
-        const RESIDENTIALADDRESS = req.body.residentialAddress;
-        const INSTITUTENAME = req.body.instituteName;
-        const INSTITUTEADDRESS = req.body.instituteAddress;
-        const INSTITUTEAREAPINCODE = req.body.institutePincode;
-        const YEAROFSTUDY = req.body.yearOfStudy;
-    
-        const info1 = new Register({
-            name : NAME,
-            email : EMAIL,
-            phoneNo : PHONENO,
-            country : COUNTRY,
-            city : CITY,
-            residentialAddress : RESIDENTIALADDRESS,
-            instituteName : INSTITUTENAME,
-            instituteAddress : INSTITUTEADDRESS,
-            instituteAreaPincode : INSTITUTEAREAPINCODE,
-            yearOfStudy : YEAROFSTUDY,
-        })
-        const userEmailExists = await User.findOne({email: EMAIL})
-        const emailExists = await Register.findOne({email:EMAIL})
-    
-        if(userEmailExists)
-        {
-            if(emailExists)
-            {
-                res.send('Email already registered')
-            }
-            else{
-                console.log('Succesfully registered')
-                info1.save()
-                res.send('Succesfully registered')
-                // res.redirect('/competitions')
-            }
-        }
-    
-    })
-    
-    */
+   */
 
 
 
