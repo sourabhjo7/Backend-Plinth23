@@ -240,7 +240,7 @@ exports.allpendingPayments = async (req, res) => {
   try {
     // const { id } = req.params;
     // console.log(id);
-    const pendingPayments = await User.find({confirmation : false});
+    const pendingPayments = await Payment.find({confirmation : false});
     
 
     res.status(200).json({ success: true,pendingPayments });
