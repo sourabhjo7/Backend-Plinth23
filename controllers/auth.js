@@ -136,7 +136,7 @@ exports.login = async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       //token
       const token = jwt.sign(
-        { user_id: user._id, email, role: user.role ,name:user.fullName ,accomodation:accomodation},
+        { user_id: user._id, email, role: user.role ,name:user.fullName ,accomodation:user.accomodation},
         process.env.SECRET_KEY,
         {
           expiresIn: "2h",
