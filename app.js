@@ -72,12 +72,15 @@ app.post("/:eventName/:user_id", async (req, res) => {
     const { user_id, eventName } = req.params;
     const { paid, upiId } = req.body;
     const file = req.files.file;
-    
     let currImg;
-    await cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-        console.log("====>",result);
-      currImg = result.url;
-    });
+    if(file){
+        await cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+            console.log("====>",result);
+          currImg = result.url;
+        });
+  }
+    
+   
     console.log(user_id, eventName, paid, upiId, currImg);
     console.log("---->", currImg);
     const user = await User.findById(user_id);
