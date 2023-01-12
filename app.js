@@ -115,6 +115,15 @@ app.post("/:eventName/:user_id", async (req, res) => {
   }
 });
 
+
+// app.get('', (req, res) => {
+//     if(Payment.confirmation === false)
+//     {
+//         Payment.confirmation = true;
+//         res.status(200).send('Payment confirmed');
+//     }
+// })
+
 /*
 
 
