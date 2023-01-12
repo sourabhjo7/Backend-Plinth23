@@ -22,6 +22,8 @@ const Payment = require("./models/payment");
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const { async } = require('q');
+const payment = require('./models/payment');
 
 
 const app = express();
@@ -65,11 +67,11 @@ app.use(function (req, res, next) {
     const { user_id, eventName } = req.params;
     const {paid,upiId}=req.body;
     const file = req.files.file;
-   let currImg;
-    await cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-      currImg = result.url; 
-    });
-    console.log("---->",currImg);
+    let currImg;
+     await cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+       currImg = result.url; 
+     });
+     console.log("---->",currImg);
     const user = await User.findById(user_id); 
           let  pendingPay = await Payment.create({
               fullName  : user.fullName,
@@ -78,18 +80,15 @@ app.use(function (req, res, next) {
               PaidFor   : eventName,
               upiId:upiId,
               paid:paid,
-              ssLink:currImg// link dalna h abhi 
+              ssLink:currImg // link dalna h abhi 
            });
     
+           console.log("payment schema ==",pendingPay)
       
   
-  
-  
-  
-    
-    return res.status(200).send(`hello to payment ----> ${user_id},${eventName}`);
+    return res.status(200).json({succes:true , pendingPay});
   });
-
+ 
 
 /*
 
@@ -233,15 +232,15 @@ app.post('/create-team', urlencodedParser,async (req,res) => {
             ca :fs.readFileSync('./chain.pem')
         };
     
-        https.createServer(credentials, app).listen(443, () => {
-            console.log('HTTPS Server running on port 443');
-        });
-        http.createServer(function (req, res) {
-            res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-            res.end();
-        }).listen(80);
+        // https.createServer(credentials, app).listen(443, () => {
+        //     console.log('HTTPS Server running on port 443');
+        // });
+        // http.createServer(function (req, res) {
+        //     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+        //     res.end();
+        // }).listen(80);
 
-        // app.listen(5000);
+        app.listen(5000);
 
      
   
