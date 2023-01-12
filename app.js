@@ -88,7 +88,7 @@ app.use(function (req, res, next) {
            console.log("payment schema ==",pendingPay)
       
   
-    return res.status(200).json({success:true , pendingPay});
+    return res.status(200).json({success:true ,msg:"you will recieve the confirmation mail of payment within 24 hours", pendingPay});
         }
         catch(e){
             return res.status(403).json({success:false,msg:"something happened pls click confirm again"});
