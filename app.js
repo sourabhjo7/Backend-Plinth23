@@ -64,6 +64,7 @@ app.use(function (req, res, next) {
   
 
   app.post("/:eventName/:user_id", async (req, res) => {
+    try{
     const { user_id, eventName } = req.params;
     const {paid,upiId}=req.body;
     const file = req.files.file;
@@ -87,7 +88,11 @@ app.use(function (req, res, next) {
            console.log("payment schema ==",pendingPay)
       
   
-    return res.status(200).json({succes:true , pendingPay});
+    return res.status(200).json({success:true , pendingPay});
+        }
+        catch(e){
+            return res.status(403).json({success:false,msg:"something happened pls click confirm again"});
+        }
   });
  
 
