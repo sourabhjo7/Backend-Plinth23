@@ -73,7 +73,8 @@ app.use(function (req, res, next) {
      });
      console.log("---->",currImg);
     const user = await User.findById(user_id); 
-          let  pendingPay = await Payment.create({
+
+      let  pendingPay = await Payment.create({
               fullName  : user.fullName,
               email     : user.email,
               phoneNo   : user.phoneNo,
