@@ -7,6 +7,9 @@ router.post("/register", controller.register);
 router.get("/getallusers",valAdmin,controller.allusers);
 
 router.get("/getallusers/:id",valAdmin,controller.allusersById); //hatana hai last me
+
+router.get("/getallpendingPayments",valAdmin,controller.allpendingPayments);
+
 // ex---> auth/login
 router.post("/login", controller.login);
 router.get("/logout", controller.logout);

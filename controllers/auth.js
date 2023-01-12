@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/userModel");
 
+const Payment = require("../models/payment");
+
 exports.allusers = async (req, res) => {
   try {
     const users = await User.find({role:'user'}); // to avoid one admin account 
@@ -229,6 +231,19 @@ exports.allusersById = async (req, res) => {
     
 
     res.status(200).json({ success: true,user });
+  } catch (e) {
+    res.status(200).json({ success:false, msg:"error "});
+  }
+};
+
+exports.allpendingPayments = async (req, res) => {
+  try {
+    // const { id } = req.params;
+    // console.log(id);
+    const pendingPayments = await User.find({confirmation : false});
+    
+
+    res.status(200).json({ success: true,pendingPayments });
   } catch (e) {
     res.status(200).json({ success:false, msg:"error "});
   }
