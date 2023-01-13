@@ -19,6 +19,10 @@ const paymentSchema = new mongoose.Schema({
     ssLink:{
         type:"String",
         default:"no link"
+    },
+    referalCode:{
+        type:String,
+        default:null
     }
 })
 

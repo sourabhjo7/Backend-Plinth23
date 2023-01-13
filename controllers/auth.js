@@ -291,7 +291,6 @@ exports.createTeam = async (req, res) => {
       success:false,
       msg:"user doesn't exist "
     })
-
   }
 
   catch (e) {
