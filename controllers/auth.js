@@ -261,7 +261,6 @@ exports.createTeam = async (req, res) => {
       teamName,
       membersEmail,
       teamSize,
-      teamCode,
     } = req.body.data
 
     const existingUser = await User.findOne(Team.leaderEmail);
@@ -270,7 +269,8 @@ exports.createTeam = async (req, res) => {
       if (existingTeam) {
         console.log("existing team ", existingTeam);
         return res.status(400).json({
-          message: "team already exits",
+          success:false,
+          msg: "team already exits",
         });
       }
 
@@ -280,8 +280,18 @@ exports.createTeam = async (req, res) => {
         membersEmail,
         teamSize,
         teamCode: Math.random().toString(36).slice(-5),
-      })
+      });
+      return res.status(200).json({
+        success:true,
+        msg:"team formed ",
+        team
+      });
     }
+    return res.status(400).json({
+      success:false,
+      msg:"user doesn't exist "
+    })
+
   }
 
   catch (e) {
