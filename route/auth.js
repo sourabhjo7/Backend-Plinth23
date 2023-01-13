@@ -4,6 +4,7 @@ const {valToken, valAdmin} = require("../midllewares/auth");
 const controller = require('../controllers/auth');//Requring Controllers
 // ex---> auth/register
 router.post("/register", controller.register);
+router.post("/createTeam/", controller.createTeam);
 router.get("/getallusers",valAdmin,controller.allusers);
 
 router.get("/getallusers/:id",valAdmin,controller.allusersById); //hatana hai last me

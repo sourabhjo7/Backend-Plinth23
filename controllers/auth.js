@@ -248,3 +248,41 @@ exports.allpendingPayments = async (req, res) => {
     res.status(200).json({ success:false, msg:"error "});
   }
 };
+
+
+
+exports.createTeam = async (req, res) => {
+  try{
+    const {
+      leaderEmail,
+      teamName,
+      membersEmail,
+      teamSize,
+      teamCode,
+    } = req.body.data
+
+    const existingTeam = await Team.findOne({ teamCode });
+    if (existingTeam) {
+      console.log("existing team ",existingTeam);
+      return res.status(400).json({
+        message: "team already exits",
+      });
+    }
+
+    const team = await Team.create({
+      leaderEmail,// emailId used to search user 
+      teamName,
+      membersEmail,
+      teamSize,
+      teamCode:Math.random().toString(36).slice(-5),
+    })
+  }
+
+  catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      msg:"Something Went Wrong . Please try again "
+    });
+
+  }
+}

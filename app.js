@@ -18,6 +18,7 @@ const authRouter = require("./route/auth");
 
 const User = require("./models/userModel");
 const Payment = require("./models/payment");
+const Team = require("./models/teamModel");
 
 const https = require("https");
 const http = require("http");
