@@ -7,7 +7,7 @@ const teamSchema = new mongoose.Schema({
     teamName : String,
     membersEmail:[],
     teamSize:Number,
-    teamCode:String,
+    teamCode:String,     //auto-generated code : Math.random().toString(36).slice(-5); 
 })
 
 module.exports  = mongoose.model("Team", teamSchema)
