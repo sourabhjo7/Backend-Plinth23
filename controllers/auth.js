@@ -6,14 +6,16 @@ const User = require("../models/userModel");
 
 const Payment = require("../models/payment");
 
+const Team = require("../models/teamModel");
+
 exports.allusers = async (req, res) => {
   try {
-    const users = await User.find({role:'user'}); // to avoid one admin account 
-    console.log("users--->",users);
-    return res.status(200).json({ success: true,count :users.length,users });
+    const users = await User.find({ role: 'user' }); // to avoid one admin account 
+    console.log("users--->", users);
+    return res.status(200).json({ success: true, count: users.length, users });
   } catch (e) {
-    
-    return res.status(401).json({ success:false, msg:e});
+
+    return res.status(401).json({ success: false, msg: e });
   }
 };
 
@@ -43,10 +45,10 @@ exports.register = async (req, res) => {
       instituteAreaPincode,
       yearOfStudy,
       password,
-      
+
     } = req.body.data;
-   const accomodation=req.body.accomodation;
-    
+    const accomodation = req.body.accomodation;
+
     // if (
     //   !(
     //     fullName &&
@@ -65,13 +67,13 @@ exports.register = async (req, res) => {
     //   console.log("data toh aya ",req.body);
     //   return res.status(404).send("All fields are required");
     // }
-    
-  
+
+
 
     const existingUser = await User.findOne({ email });
-    
+
     if (existingUser) {
-      console.log("existing user ",existingUser);
+      console.log("existing user ", existingUser);
       return res.status(400).json({
         message: "already exits",
       });
@@ -101,7 +103,7 @@ exports.register = async (req, res) => {
 
     //token
     const token = jwt.sign(
-      { user_id: user._id, email, role: user.role,name:user.fullName ,accomodation:accomodation},
+      { user_id: user._id, email, role: user.role, name: user.fullName, accomodation: accomodation },
       process.env.SECRET_KEY,
       {
         expiresIn: "10h",
@@ -120,9 +122,9 @@ exports.register = async (req, res) => {
     });
   } catch (e) {
     return res.status(500).json({
-      msg:"Something Went Wrong . Please try again "
+      msg: "Something Went Wrong . Please try again "
     })
-    ;
+      ;
     console.log(e);
   }
 };
@@ -136,7 +138,7 @@ exports.login = async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       //token
       const token = jwt.sign(
-        { user_id: user._id, email, role: user.role ,name:user.fullName ,accomodation:user.accomodation},
+        { user_id: user._id, email, role: user.role, name: user.fullName, accomodation: user.accomodation },
         process.env.SECRET_KEY,
         {
           expiresIn: "2h",
@@ -159,17 +161,17 @@ exports.login = async (req, res) => {
       });
     } else {
       return res.status(400).json({
-        msg:"Invalid Credentials , Create a new account or check details ",
-        success:false
+        msg: "Invalid Credentials , Create a new account or check details ",
+        success: false
       })
-      
+
       console.log("check password or create new account");
     }
 
     res.status(400).send("Email or password incorrect");
   } catch (e) {
     return res.status(500).json({
-      msg:"Something Went Wrong . Please try again "
+      msg: "Something Went Wrong . Please try again "
     })
     console.log(e);
   }
@@ -179,8 +181,9 @@ exports.logout = (req, res) => {
   console.log("logout route called ");
   console.log(req.cookies);
   return res.clearCookie("token").status(200).json({
-    success:true,
-    msg:"Successfully Logged Out "});
+    success: true,
+    msg: "Successfully Logged Out "
+  });
 };
 exports.updateUser = async (req, res) => {
   const { firstName, lastName, email, password, userRole } = req.body;
@@ -228,11 +231,11 @@ exports.allusersById = async (req, res) => {
     const { id } = req.params;
     console.log(id);
     const user = await User.findById(id);
-    
 
-    res.status(200).json({ success: true,user });
+
+    res.status(200).json({ success: true, user });
   } catch (e) {
-    res.status(200).json({ success:false, msg:"error "});
+    res.status(200).json({ success: false, msg: "error " });
   }
 };
 
@@ -240,19 +243,19 @@ exports.allpendingPayments = async (req, res) => {
   try {
     // const { id } = req.params;
     // console.log(id);
-    const pendingPayments = await Payment.find({confirmation : false});
-    
+    const pendingPayments = await Payment.find({ confirmation: false });
 
-    res.status(200).json({ success: true,pendingPayments });
+
+    res.status(200).json({ success: true, pendingPayments });
   } catch (e) {
-    res.status(200).json({ success:false, msg:"error "});
+    res.status(200).json({ success: false, msg: "error " });
   }
 };
 
 
 
 exports.createTeam = async (req, res) => {
-  try{
+  try {
     const {
       leaderEmail,
       teamName,
@@ -261,27 +264,30 @@ exports.createTeam = async (req, res) => {
       teamCode,
     } = req.body.data
 
+    const existingUser = await User.findOne(Team.leaderEmail);
     const existingTeam = await Team.findOne({ teamCode });
-    if (existingTeam) {
-      console.log("existing team ",existingTeam);
-      return res.status(400).json({
-        message: "team already exits",
-      });
-    }
+    if (existingUser) {
+      if (existingTeam) {
+        console.log("existing team ", existingTeam);
+        return res.status(400).json({
+          message: "team already exits",
+        });
+      }
 
-    const team = await Team.create({
-      leaderEmail,// emailId used to search user 
-      teamName,
-      membersEmail,
-      teamSize,
-      teamCode:Math.random().toString(36).slice(-5),
-    })
+      const team = await Team.create({
+        leaderEmail,// emailId used to search user 
+        teamName,
+        membersEmail,
+        teamSize,
+        teamCode: Math.random().toString(36).slice(-5),
+      })
+    }
   }
 
   catch (e) {
     console.log(e);
     return res.status(500).json({
-      msg:"Something Went Wrong . Please try again "
+      msg: "Something Went Wrong . Please try again "
     });
 
   }
