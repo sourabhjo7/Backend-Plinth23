@@ -164,11 +164,11 @@ exports.login = async (req, res) => {
         msg: "Invalid Credentials , Create a new account or check details ",
         success: false
       })
-
+      res.status(400).send("Email or password incorrect");
       console.log("check password or create new account");
     }
 
-    res.status(400).send("Email or password incorrect");
+    
   } catch (e) {
     return res.status(500).json({
       msg: "Something Went Wrong . Please try again "

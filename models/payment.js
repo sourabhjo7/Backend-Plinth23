@@ -20,7 +20,7 @@ const paymentSchema = new mongoose.Schema({
         type:"String",
         default:"no link"
     },
-    referalCode:{
+    referal:{
         type:String,
         default:null
     }

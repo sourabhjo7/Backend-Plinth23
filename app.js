@@ -71,7 +71,7 @@ app.use("/auth", authRouter);
 app.post("/:eventName/:user_id", async (req, res) => {
   try {
     const { user_id, eventName } = req.params;
-    const { paid, upiId } = req.body;
+    const { paid, upiId ,referal} = req.body;
     const file = req.files.file;
     let currImg;
     if(file){
@@ -93,7 +93,8 @@ app.post("/:eventName/:user_id", async (req, res) => {
       paidForEvent: eventName,
       upiId: upiId,
       paid: paid,
-      ssLink: currImg, // link dalna h abhi
+      ssLink: currImg,
+      referal:referal // link dalna h abhi
     });
 
     console.log("payment schema ==", pendingPay);
