@@ -279,7 +279,7 @@ exports.createTeam = async (req, res) => {
         teamName,
         membersEmail,
         teamSize,
-        teamCode: Math.random().toString(36).slice(-5),
+        teamCode: Date.now().toString(36).slice(-5),
       });
       return res.status(200).json({
         success:true,
