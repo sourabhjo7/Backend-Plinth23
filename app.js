@@ -134,6 +134,7 @@ app.get("/addevent/:eventName/:user_id",async (req,res)=>{
         msg:"payment already done ",
         success:true
       });
+      
     }
   }
   catch(e){
@@ -248,4 +249,4 @@ const credentials = {
 //     res.end();
 // }).listen(80);
 
-app.listen(5000);
+app.listen(3001);

@@ -12,7 +12,7 @@ const { async } = require("q");
 exports.allusers = async (req, res) => {
   try {
     const users = await User.find({ role: 'user' }); // to avoid one admin account 
-    console.log("users--->", users);
+    
     return res.status(200).json({ success: true, count: users.length, users });
   } catch (e) {
 
@@ -74,7 +74,7 @@ exports.register = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      console.log("existing user ", existingUser);
+      
       return res.status(400).json({
         message: "already exits",
       });
@@ -166,7 +166,7 @@ exports.login = async (req, res) => {
         success: false
       })
       res.status(400).send("Email or password incorrect");
-      console.log("check password or create new account");
+      
     }
 
     
@@ -174,7 +174,7 @@ exports.login = async (req, res) => {
     return res.status(500).json({
       msg: "Something Went Wrong . Please try again "
     })
-    console.log(e);
+    
   }
 };
 
@@ -255,16 +255,21 @@ exports.allpendingPayments = async (req, res) => {
 
 exports.confirmPayments=async (req,res)=>{
   const {id}=req.params;
+  console.log(
+    "=id==>",id
+  );
   try{
-    let Payment=Payment.findById(id);
-    Payment.confirmation=true;
-     await  Payment.save();
+    let payment= await Payment.findById(id);
+    payment.confirmation=true;
+    console.log("--",payment._id);
+      await payment.save();
      return res.status(200).json({
       msg:"confirmed payment ",
       success:true
      });
   }
   catch(e){
+    console.log(e);
     return res.status(500).json({
       success:false,
       msg:"internal error "
@@ -286,7 +291,7 @@ exports.createTeam = async (req, res) => {
     const existingTeam = await Team.findOne({ teamCode });
     if (existingUser) {
       if (existingTeam) {
-        console.log("existing team ", existingTeam);
+        
         return res.status(400).json({
           success:false,
           msg: "team already exits",
