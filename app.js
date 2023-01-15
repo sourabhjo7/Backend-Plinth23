@@ -25,6 +25,7 @@ const http = require("http");
 const fs = require("fs");
 const { async } = require("q");
 const payment = require("./models/payment");
+const { findById } = require("./models/userModel");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -71,17 +72,16 @@ app.use("/auth", authRouter);
 app.post("/:eventName/:user_id", async (req, res) => {
   try {
     const { user_id, eventName } = req.params;
-    const { paid, upiId ,referal} = req.body;
+    const { paid, upiId, referal } = req.body;
     const file = req.files.file;
     let currImg;
-    if(file){
-        await cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-            console.log("====>",result);
-          currImg = result.url;
-        });
-  }
-    
-   
+    if (file) {
+      await cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+        console.log("====>", result);
+        currImg = result.url;
+      });
+    }
+
     console.log(user_id, eventName, paid, upiId, currImg);
     console.log("---->", currImg);
     const user = await User.findById(user_id);
@@ -94,28 +94,119 @@ app.post("/:eventName/:user_id", async (req, res) => {
       upiId: upiId,
       paid: paid,
       ssLink: currImg,
-      referal:referal // link dalna h abhi
+      referal: referal, // link dalna h abhi
     });
-
+    user.events.push(eventName);
+    await user.save(); // saves value in user
+    console.log(eventName, " saved in the user ");
     console.log("payment schema ==", pendingPay);
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        msg: "you will recieve the confirmation mail of payment within 24 hours",
-        pendingPay,
-      });
+    return res.status(200).json({
+      success: true,
+      msg: "you will recieve the confirmation mail of payment within 24 hours",
+      pendingPay,
+    });
   } catch (e) {
     console.log("error", e);
-    return res
-      .status(402)
-      .json({
-        success: false,
-        msg: "something happened pls click confirm again",
-      });
+    return res.status(402).json({
+      success: false,
+      msg: "something happened pls click confirm again",
+    });
   }
 });
+
+app.get("/addevent/:eventName/:user_id",async (req,res)=>{
+  console.log("heelo add event ==");
+  const { user_id, eventName } = req.params;
+  let user = await User.findById(user_id);
+  try{
+    console.log("heelo add event inside try ==");
+    if(user.events.includes(eventName)){
+      return res.status(200).json({
+        msg:"event already registered ",
+        success:true
+      });
+    }
+    else{
+      user.events.push(eventName);
+      await user.save();
+      return res.status(200).json({
+        msg:"payment already done ",
+        success:true
+      });
+    }
+  }
+  catch(e){
+    return res.status(400).json({
+      success:false,
+      msg:"something went wrong , Try again "
+    });
+  }
+   
+
+})
+app.get("/checkevents/:eventName/:user_id", async (req, res) => {
+  console.log("heelo ==");
+  const { user_id, eventName } = req.params;
+  try{
+    console.log("heelo check  event inside try ==");
+  let user = await User.findById(user_id);
+  let specialEvent = false;
+  let simpleEvent = false;
+  for(let i =0;i<user.events.length;i++){
+    if (
+      user.events[i] === "shark_tank" ||
+      user.events[i] === "plinth's_mun'23" ||
+      user.events[i] === "robowar" ||
+      user.events[i] === "wca_speedcubing"
+    ) {
+      specialEvent=true;
+      break;
+    }
+    else{
+      simpleEvent=true;
+    }
+  }
+  if(specialEvent){
+    return res.status(200).json({
+      pay:false,
+      msg:"user events registration info "
+    });
+  }
+  else if (simpleEvent){
+    if( ["shark_tank","plinth's_mun'23","robowar","wca_speedcubing"].includes(eventName)===false)
+    return res.status(200).json({
+      pay:false,
+      msg:"user events registration info "
+    });
+    else{
+      return res.status(200).json({
+        pay:true,
+        msg:"user events registration info "
+      });
+    }
+  }
+  else{
+    return res.status(200).json({
+      pay:true,
+      msg:"user events registration info "
+    });
+  }
+ 
+
+  
+  }
+  catch(e){
+    console.log("heelo in error  ==",e);
+    return res.status(400).json({
+      msg:"error",
+      error :e
+    });
+  }
+
+});
+
+
 
 
 // app.get('', (req, res) => {
@@ -149,12 +240,12 @@ const credentials = {
   ca: fs.readFileSync("./chain.pem"),
 };
 
-https.createServer(credentials, app).listen(443, () => {
-    console.log('HTTPS Server running on port 443');
-});
-http.createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(80);
+// https.createServer(credentials, app).listen(443, () => {
+//     console.log('HTTPS Server running on port 443');
+// });
+// http.createServer(function (req, res) {
+//     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+//     res.end();
+// }).listen(80);
 
-// app.listen(5000);
+app.listen(5000);

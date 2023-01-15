@@ -9,8 +9,8 @@ router.get("/getallusers",valAdmin,controller.allusers);
 
 router.get("/getallusers/:id",valAdmin,controller.allusersById); //hatana hai last me
 
-router.get("/getallpendingPayments",valAdmin,controller.allpendingPayments);
-
+router.get("/getallpendingpayments",valAdmin,controller.allpendingPayments);
+router.get("/confirmpayment/:id",valAdmin,controller.confirmPayments)
 // ex---> auth/login
 router.post("/login", controller.login);
 router.get("/logout", controller.logout);

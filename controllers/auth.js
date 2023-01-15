@@ -7,6 +7,7 @@ const User = require("../models/userModel");
 const Payment = require("../models/payment");
 
 const Team = require("../models/teamModel");
+const { async } = require("q");
 
 exports.allusers = async (req, res) => {
   try {
@@ -252,7 +253,25 @@ exports.allpendingPayments = async (req, res) => {
   }
 };
 
-
+exports.confirmPayments=async (req,res)=>{
+  const {id}=req.params;
+  try{
+    let Payment=Payment.findById(id);
+    Payment.confirmation=true;
+     await  Payment.save();
+     return res.status(200).json({
+      msg:"confirmed payment ",
+      success:true
+     });
+  }
+  catch(e){
+    return res.status(500).json({
+      success:false,
+      msg:"internal error "
+    })
+  }
+ 
+}
 
 exports.createTeam = async (req, res) => {
   try {
