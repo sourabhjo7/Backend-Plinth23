@@ -154,6 +154,7 @@ app.get("/checkevents/:eventName/:user_id", async (req, res) => {
   let user = await User.findById(user_id);
   let specialEvent = false;
   let simpleEvent = false;
+  let accomodation=false;
   for(let i =0;i<user.events.length;i++){
     if (
       user.events[i] === "shark_tank" ||
@@ -162,24 +163,43 @@ app.get("/checkevents/:eventName/:user_id", async (req, res) => {
       user.events[i] === "wca_speedcubing"
     ) {
       specialEvent=true;
-      break;
+    }
+    else if(user.events[i]==="accomodation"){
+      accomodation=true;
     }
     else{
       simpleEvent=true;
     }
   }
   if(specialEvent){
+    if(eventName==="accomodation" && accomodation===false){
+      return res.status(200).json({
+        pay:true,
+        msg:"user events registration info "
+      });
+    }
+    else{
+      return res.status(200).json({
+        pay:false,
+        msg:"user events registration info "
+      });
+    }
+    
+  }
+
+  else if (simpleEvent){
+    if( ["shark_tank","plinth's_mun'23","robowar","wca_speedcubing","accomodation"].includes(eventName)===false){
+    return res.status(200).json({
+      pay:false,
+      msg:"user events registration info "
+    });
+  } 
+  else if(accomodation===true && eventName==="accomodation"){
     return res.status(200).json({
       pay:false,
       msg:"user events registration info "
     });
   }
-  else if (simpleEvent){
-    if( ["shark_tank","plinth's_mun'23","robowar","wca_speedcubing"].includes(eventName)===false)
-    return res.status(200).json({
-      pay:false,
-      msg:"user events registration info "
-    });
     else{
       return res.status(200).json({
         pay:true,
@@ -188,10 +208,19 @@ app.get("/checkevents/:eventName/:user_id", async (req, res) => {
     }
   }
   else{
-    return res.status(200).json({
-      pay:true,
-      msg:"user events registration info "
-    });
+    if(eventName==="accomodation"&&accomodation===true){
+      return res.status(200).json({
+        pay:false,
+        msg:"user events registration info "
+      });
+    }
+    else{
+      return res.status(200).json({
+        pay:true,
+        msg:"user events registration info "
+      });
+    }
+    
   }
  
 
