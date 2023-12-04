@@ -270,12 +270,12 @@ const credentials = {
   ca: fs.readFileSync("./chain.pem"),
 };
 
-https.createServer(credentials, app).listen(443, () => {
-    console.log('HTTPS Server running on port 443');
-});
-http.createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(80);
+// https.createServer(credentials, app).listen(443, () => {
+//     console.log('HTTPS Server running on port 443');
+// });
+// http.createServer(function (req, res) {
+//     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+//     res.end();
+// }).listen(80);
 
-// app.listen(3001);
+app.listen(3001);
