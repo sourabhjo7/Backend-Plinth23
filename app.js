@@ -25,7 +25,6 @@ const http = require("http");
 const fs = require("fs");
 const payment = require("./models/payment");
 
-
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -43,12 +42,11 @@ cloudinary.config({
 });
 app.use(
   cors({
-    origin:
-    [
+    origin: [
       "https://plinth.co.in",
       "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
       "http://localhost:3000",
-    ], 
+    ],
     // origin: ["http://localhost:3000"], // change origin based on domain main of the application
     optionsSuccessStatus: 200,
     credentials: true,
@@ -57,12 +55,11 @@ app.use(
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header("Content-Type", "application/json;charset=UTF-8");
   res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
   next();
 });
 
@@ -116,129 +113,113 @@ app.post("/:eventName/:user_id", async (req, res) => {
   }
 });
 
-app.get("/addevent/:eventName/:user_id",async (req,res)=>{
+app.get("/addevent/:eventName/:user_id", async (req, res) => {
   console.log("heelo add event ==");
   const { user_id, eventName } = req.params;
   let user = await User.findById(user_id);
-  try{
+  try {
     console.log("heelo add event inside try ==");
-    if(user.events.includes(eventName)){
+    if (user.events.includes(eventName)) {
       return res.status(200).json({
-        msg:"event already registered ",
-        success:true
+        msg: "event already registered ",
+        success: true,
       });
-    }
-    else{
+    } else {
       user.events.push(eventName);
       await user.save();
       return res.status(200).json({
-        msg:"payment already done ",
-        success:true
+        msg: "payment already done ",
+        success: true,
       });
-      
     }
-  }
-  catch(e){
+  } catch (e) {
     return res.status(400).json({
-      success:false,
-      msg:"something went wrong , Try again "
+      success: false,
+      msg: "something went wrong , Try again ",
     });
   }
-   
-
-})
+});
 app.get("/checkevents/:eventName/:user_id", async (req, res) => {
   console.log("heelo ==");
   const { user_id, eventName } = req.params;
-  try{
+  try {
     console.log("heelo check  event inside try ==");
-  let user = await User.findById(user_id);
-  let specialEvent = false;
-  let simpleEvent = false;
-  let accomodation=false;
-  for(let i =0;i<user.events.length;i++){
-    if (
-      user.events[i] === "shark_tank" ||
-      user.events[i] === "plinth's_mun'23" ||
-      user.events[i] === "robowar" ||
-      user.events[i] === "wca_speedcubing"
-    ) {
-      specialEvent=true;
+    let user = await User.findById(user_id);
+    let specialEvent = false;
+    let simpleEvent = false;
+    let accomodation = false;
+    for (let i = 0; i < user.events.length; i++) {
+      if (
+        user.events[i] === "shark_tank" ||
+        user.events[i] === "plinth's_mun'23" ||
+        user.events[i] === "robowar" ||
+        user.events[i] === "wca_speedcubing"
+      ) {
+        specialEvent = true;
+      } else if (user.events[i] === "accomodation") {
+        accomodation = true;
+      } else {
+        simpleEvent = true;
+      }
     }
-    else if(user.events[i]==="accomodation"){
-      accomodation=true;
+    if (specialEvent) {
+      if (eventName === "accomodation" && accomodation === false) {
+        return res.status(200).json({
+          pay: true,
+          msg: "user events registration info ",
+        });
+      } else {
+        return res.status(200).json({
+          pay: false,
+          msg: "user events registration info ",
+        });
+      }
+    } else if (simpleEvent) {
+      if (
+        [
+          "shark_tank",
+          "plinth's_mun'23",
+          "robowar",
+          "wca_speedcubing",
+          "accomodation",
+        ].includes(eventName) === false
+      ) {
+        return res.status(200).json({
+          pay: false,
+          msg: "user events registration info ",
+        });
+      } else if (accomodation === true && eventName === "accomodation") {
+        return res.status(200).json({
+          pay: false,
+          msg: "user events registration info ",
+        });
+      } else {
+        return res.status(200).json({
+          pay: true,
+          msg: "user events registration info ",
+        });
+      }
+    } else {
+      if (eventName === "accomodation" && accomodation === true) {
+        return res.status(200).json({
+          pay: false,
+          msg: "user events registration info ",
+        });
+      } else {
+        return res.status(200).json({
+          pay: true,
+          msg: "user events registration info ",
+        });
+      }
     }
-    else{
-      simpleEvent=true;
-    }
-  }
-  if(specialEvent){
-    if(eventName==="accomodation" && accomodation===false){
-      return res.status(200).json({
-        pay:true,
-        msg:"user events registration info "
-      });
-    }
-    else{
-      return res.status(200).json({
-        pay:false,
-        msg:"user events registration info "
-      });
-    }
-    
-  }
-
-  else if (simpleEvent){
-    if( ["shark_tank","plinth's_mun'23","robowar","wca_speedcubing","accomodation"].includes(eventName)===false){
-    return res.status(200).json({
-      pay:false,
-      msg:"user events registration info "
-    });
-  } 
-  else if(accomodation===true && eventName==="accomodation"){
-    return res.status(200).json({
-      pay:false,
-      msg:"user events registration info "
-    });
-  }
-    else{
-      return res.status(200).json({
-        pay:true,
-        msg:"user events registration info "
-      });
-    }
-  }
-  else{
-    if(eventName==="accomodation"&&accomodation===true){
-      return res.status(200).json({
-        pay:false,
-        msg:"user events registration info "
-      });
-    }
-    else{
-      return res.status(200).json({
-        pay:true,
-        msg:"user events registration info "
-      });
-    }
-    
-  }
- 
-
-  
-  }
-  catch(e){
-    console.log("heelo in error  ==",e);
+  } catch (e) {
+    console.log("heelo in error  ==", e);
     return res.status(400).json({
-      msg:"error",
-      error :e
+      msg: "error",
+      error: e,
     });
   }
-
 });
-
-
-
 
 // app.get('', (req, res) => {
 //     if(Payment.confirmation === false)
