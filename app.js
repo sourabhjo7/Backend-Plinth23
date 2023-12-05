@@ -46,7 +46,7 @@ app.use(
   cors({
     origin: [
       "https://plinth.co.in",
-      "https://63b9f54534bf097ab0b08ac4--roaring-kitsune-c3e064.netlify.app",
+      "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
       "http://localhost:3000",
     ], // origin: ["http://localhost:3000"], // change origin based on domain main of the application
     optionsSuccessStatus: 200,
