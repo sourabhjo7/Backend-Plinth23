@@ -23,9 +23,8 @@ const Team = require("./models/teamModel");
 const https = require("https");
 const http = require("http");
 const fs = require("fs");
-const { async } = require("q");
 const payment = require("./models/payment");
-const { findById } = require("./models/userModel");
+
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,12 +43,12 @@ cloudinary.config({
 });
 app.use(
   cors({
-    origin: "*",
-    // [
-    //   "https://plinth.co.in",
-    //   "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
-    //   "http://localhost:3000",
-    // ], 
+    origin:
+    [
+      "https://plinth.co.in",
+      "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
+      "http://localhost:3000",
+    ], 
     // origin: ["http://localhost:3000"], // change origin based on domain main of the application
     optionsSuccessStatus: 200,
     credentials: true,
