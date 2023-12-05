@@ -44,11 +44,13 @@ cloudinary.config({
 });
 app.use(
   cors({
-    origin: [
-      "https://plinth.co.in",
-      "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
-      "http://localhost:3000",
-    ], // origin: ["http://localhost:3000"], // change origin based on domain main of the application
+    origin: "*",
+    // [
+    //   "https://plinth.co.in",
+    //   "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
+    //   "http://localhost:3000",
+    // ], 
+    // origin: ["http://localhost:3000"], // change origin based on domain main of the application
     optionsSuccessStatus: 200,
     credentials: true,
   })
