@@ -40,29 +40,28 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
-app.use(
-  cors({
-    origin: [
-      "https://plinth.co.in",
-      "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
-      "http://localhost:3000",
-    ],
-    // origin: ["http://localhost:3000"], // change origin based on domain main of the application
-    optionsSuccessStatus: 200,
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: [
+    "https://plinth.co.in",
+    "https://656d898a7bad5326a5c6c169--roaring-kitsune-c3e064.netlify.app",
+    "http://localhost:3000",
+  ],
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
-app.use(function (req, res, next) {
-  res.header("Content-Type", "application/json;charset=UTF-8");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.header("Content-Type", "application/json;charset=UTF-8");
+//   res.header("Access-Control-Allow-Credentials", true);
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
 
 // Using Routes
 app.use("/", indexRouter);
